@@ -8,7 +8,7 @@ const models = require('../models');
  * GET /
  */
 const index = async (req, res) => {
-	const examples = await models.Example.fetchAll();
+	const all_users = await models.Example.fetchAll();
 
 	res.send({
 		status: 'success',
