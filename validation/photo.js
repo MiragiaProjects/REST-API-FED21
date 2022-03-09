@@ -11,19 +11,38 @@
   * Required: title
   * Optional: -
   */
- const createRules = [
-     body('title').exists().isLength({ min: 4 }),
- ];
- 
+  const createRules = [
+	body('title').exists().isLength({ min: 4 }),
+	body('url').exists().isLength({ min: 10, max: 13 }),
+	body('comment').optional().isInt({ min: 1 }),
+	body('user_id').exists().custom(async value => {
+		const user = await new models.User({ id: value }).fetch({ require: false });
+		if (!user) {
+			return Promise.reject(`User with ID ${value} does not exist.`);
+		}
+
+		return Promise.resolve();
+	}),
+];
  /**
   * Update Example validation rules
   *
   * Required: -
   * Optional: title
   */
- const updateRules = [
-     body('title').optional().isLength({ min: 4 }),
- ];
+  const updateRules = [
+	body('title').optional().isLength({ min: 4 }),
+	body('url').optional().isLength({ min: 10, max: 13 }),
+	body('comment').optional().isInt({ min: 1 }),
+	body('user_id').optional().custom(async value => {
+		const user = await new models.User({ id: value }).fetch({ require: false });
+		if (!user) {
+			return Promise.reject(`User with ID ${value} does not exist.`);
+		}
+
+		return Promise.resolve();
+	}),
+];
  
  module.exports = {
      createRules,

@@ -21,16 +21,17 @@ const index = async (req, res) => {
 /**
  * Get a specific resource
  *
- * GET /:exampleId
+ * GET /:albumId
  */
 const show = async (req, res) => {
 	const album = await new models.Album({ id: req.params.albumId })
-		.fetch({ withRelated: ['users']});
+		.fetch({ withRelated: ['photos']});
 
 	res.send({
 		status: 'success',
 		data: {
             album,
+			photos,
         }
 	});
 }
@@ -73,13 +74,13 @@ const store = async (req, res) => {
 /**
  * Update a specific resource
  *
- * PUT /:exampleId
+ * PUT /:updateId
  */
 const update = async (req, res) => {
 	const albumId = req.params.albumId;
 
-	// make sure example exists
-	const album = await new models.Example({ id: albumId }).fetch({ require: false });
+	// make sure album exists
+	const album = await new models.Album({ id: albumId }).fetch({ require: false });
 	if (!album) {
 		debug("album to update was not found. %o", { id: albumId });
 		res.status(404).send({
@@ -118,22 +119,10 @@ const update = async (req, res) => {
 	}
 }
 
-/**
- * Destroy a specific resource
- *
- * DELETE /:exampleId
- */
-//const destroy = (req, res) => {
-	//res.status(400).send({
-		//status: 'fail',
-		//message: 'You need to write the code for deleting this resource yourself.',
-	//});
-//}
-
 module.exports = {
 	index,
 	show,
 	store,
 	update,
-	//destroy,
+	
 }
