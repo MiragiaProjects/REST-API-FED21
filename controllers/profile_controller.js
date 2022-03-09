@@ -6,6 +6,8 @@ const models = require('../models');
 
 const { User } = require('../models');
 
+const { Album } = require('../models');
+
 
 // Get logged in users info
 const getProfile = async (req, res) => {
@@ -165,20 +167,20 @@ const addPhoto = async (req, res) => {
    // get only the validated data from the request
    const validData = matchedData(req);
 
-   // fetch user and eager-load books relation
+   // fetch user and eager-load photos relation
    const user = await User.fetchById(req.user.user_id, { withRelated: ['photos'] });
 
-   // get the user's books
-   const albums = user.related('photos');
+   // get the user's photos
+   const photos = user.related('photos');
 
-   // check if book is already in the user's list of books
-   const existing_photo = albums.find(photo => photo.id == validData.photo_id);
+   // check if photo is already in the user's list of photos
+   const existing_photo = photos.find(photo => photo.id == validData.photo_id);
 
-   // if it already exists, bail
+   // if photo already exists, error
    if (existing_photo) {
        return res.send({
            status: 'fail',
-           data: 'The Photo already exists.',
+           data: 'That Photo already exists.',
        });
    }
 
@@ -231,6 +233,55 @@ const updatePhoto = async (req, res) => {
    }
 }
 
+
+
+//Add a photo to an album as a logged in user
+
+const addPhotoToAlbum = async (req, res) => {
+   // check for errors
+
+   const errors = validationResult(req);
+   if (!errors.isEmpty()) {
+       return res.status(422).send({ status: 'fail', data: errors.array() });
+   }
+   // get only the validated data from the request
+   const validData = matchedData(req);
+
+   // fetch album and eager-load photos relation
+   const album = await Album.fetchById(req.album.album_id, { withRelated: ['photos'] });
+
+   // get the album's photos
+   const photos = album.related('photos');
+
+   // check if photo is already in the albums's list of photos
+   const existing_photo = photos.find(photo => photo.id == validData.photo_id);
+
+   // if photo already exists, error
+   if (existing_photo) {
+       return res.send({
+           status: 'fail',
+           data: 'The Photo already exists.',
+       });
+   }
+
+   try {
+       const result = await album.photos().attach(validData.photo_id);
+       debug("Added photo to album successfully: %O", result);
+
+       res.send({
+           status: 'success',
+           data: null,
+       });
+
+   } catch (error) {
+       res.status(500).send({
+           status: 'error',
+           message: 'Exception thrown in database when adding a photo to an album.',
+       });
+       throw error;
+   }
+}
+
 module.exports = {
     getProfile,
     updateProfile,
@@ -239,5 +290,6 @@ module.exports = {
     updateAlbum,
     getPhotos,
     addPhoto,
-    updatePhoto
+    updatePhoto,
+    addPhotoToAlbum
 }
