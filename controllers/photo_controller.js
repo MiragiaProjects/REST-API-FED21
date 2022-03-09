@@ -1,4 +1,4 @@
-const debug = require('debug')('books:example_controller');
+const debug = require('debug')('album:photo_controller');
 const { matchedData, validationResult } = require('express-validator');
 const models = require('../models');
 
@@ -21,7 +21,7 @@ const index = async (req, res) => {
 /**
  * Get a specific resource
  *
- * GET /:exampleId
+ * GET /:photoId
  */
 const show = async (req, res) => {
 	const photo = await new models.Photo({ id: req.params.photoId })
@@ -52,7 +52,7 @@ const store = async (req, res) => {
 
 	try {
 		const photo = await new models.Photo(validData).save();
-		debug("Created new example successfully: %O", example);
+		debug("Created new photo successfully: %O", photo);
 
 		res.send({
 			status: 'success',
@@ -79,9 +79,9 @@ const update = async (req, res) => {
 	const photoId = req.params.photoId;
 
 	// make sure example exists
-	const photo = await new models.Example({ id: photoId }).fetch({ require: false });
-	if (!example) {
-		debug("Example to update was not found. %o", { id: photoId });
+	const photo = await new models.Photo({ id: photoId }).fetch({ require: false });
+	if (!photo) {
+		debug("Photo to update was not found. %o", { id: photoId });
 		res.status(404).send({
 			status: 'fail',
 			data: 'Photo Not Found',
@@ -99,7 +99,7 @@ const update = async (req, res) => {
 	const validData = matchedData(req);
 
 	try {
-		const updatedPhoto = await example.save(validData);
+		const updatedPhoto = await photo.save(validData);
 		debug("Updated photo successfully: %O", updatedPhoto);
 
 		res.send({
@@ -118,22 +118,10 @@ const update = async (req, res) => {
 	}
 }
 
-/**
- * Destroy a specific resource
- *
- * DELETE /:exampleId
- */
-// const destroy = (req, res) => {
-// 	res.status(400).send({
-// 		status: 'fail',
-// 		message: 'You need to write the code for deleting this resource yourself.',
-// 	});
-// }
 
 module.exports = {
 	index,
 	show,
 	store,
 	update,
-	//destroy,
 }

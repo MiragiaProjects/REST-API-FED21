@@ -14,6 +14,7 @@ router.post('/register', userValidationRules.createRules, authController.registe
 
 router.use('/albums', require('./albums'));
 router.use('/photos', require('./photos'));
-router.use('/users', auth.basic, require('./users'));
+router.use('/users',  require('./users'));
+router.use('/profile',auth.basic, require('./profile'));
 
 module.exports = router;

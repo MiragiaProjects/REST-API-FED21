@@ -1,4 +1,4 @@
-const debug = require('debug')('books:example_controller');
+const debug = require('debug')('album:album_controller');
 const { matchedData, validationResult } = require('express-validator');
 const models = require('../models');
 
@@ -25,13 +25,14 @@ const index = async (req, res) => {
  */
 const show = async (req, res) => {
 	const album = await new models.Album({ id: req.params.albumId })
-		.fetch({ withRelated: ['photos']});
+		.fetch({ withRelated: ['photos','user']});
 
 	res.send({
 		status: 'success',
 		data: {
             album,
 			photos,
+			user
         }
 	});
 }
@@ -53,7 +54,7 @@ const store = async (req, res) => {
 
 	try {
 		const album = await new models.Album(validData).save();
-		debug("Created new example successfully: %O", album);
+		debug("Created new album successfully: %O", album);
 
 		res.send({
 			status: 'success',
@@ -113,7 +114,7 @@ const update = async (req, res) => {
 	} catch (error) {
 		res.status(500).send({
 			status: 'error',
-			message: 'Exception thrown in database when updating a new example.',
+			message: 'Exception thrown in database when updating a new album.',
 		});
 		throw error;
 	}
@@ -124,5 +125,4 @@ module.exports = {
 	show,
 	store,
 	update,
-	
 }

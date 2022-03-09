@@ -23,7 +23,7 @@ const models = require('../models');
     // generate a hash of `validData.password`
     // and overwrite `validData.password` with the generated hash
     try {
-        validData.password = await bcrypt.hash(validData.password, models.User.hashSaltRounds);
+        validData.password = await bcrypt.hash(validData.password, 10);
 
     } catch (error) {
         res.status(500).send({
