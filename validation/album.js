@@ -40,8 +40,13 @@
 		return Promise.resolve();
 	}),
 ];
+
+	const addPhoto = [
+		body('photo_id').exists().isInt(),
+	];
  
  module.exports = {
      createRules,
      updateRules,
+	 addPhoto
  }

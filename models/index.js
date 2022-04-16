@@ -7,8 +7,8 @@ const knex = require('knex')({
 		port: process.env.DB_PORT || 3306,
 		charset: process.env.DB_CHARSET || 'utf8mb4',
 		database: process.env.DB_NAME || 'boilerplate',
-		user: process.env.DB_USER || 'boilerplate',
-		password: process.env.DB_PASSWORD || '',
+		user: process.env.DB_USER || 'root',
+		password: process.env.DB_PASSWORD || 'mysql',
 	}
 });
 

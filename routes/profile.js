@@ -5,49 +5,36 @@ const userValidationRules = require('../validation/user');
 const albumValidationRules = require('../validation/album');
 const photoValidationRules = require('../validation/photo');
 
+////////////////////////// ALBUMS /////////////////////////////////////
 
+/* Get all albums */
+router.get('/', profileController.indexAlbum);
 
-//  Get logged in user's profile
- 
-router.get('/', profileController.getProfile);
+/* Get a specific album */
+router.get('/:albumId', profileController.showAlbum);
 
+/* Store a new album */
+router.post('/', albumValidationRules.createRules, profileController.storeAlbum);
 
- // Update logged in user's profile
- 
-router.put('/', userValidationRules.updateRules, profileController.updateProfile);
+/* Update a specific album */
+router.put('/:albumId', albumValidationRules.updateRules, profileController.updateAlbum);
 
+/* Add photo to album */
+router.post('/:albumId/photos', albumValidationRules.addPhoto, profileController.addPhotoToAlbum);
 
-// Get authenticated user's albums
- 
-router.get('/albums', profileController.getAlbums);
+////////////////////////// PHOTOS //////////////////////////////////
 
+/* Get all photos */
+router.get('/', profileController.indexPhoto);
 
- // Add a album to the logged user
- 
- 
-router.post('/albums', albumValidationRules.createRules, profileController.addAlbum);
+/* Get a specific photo */
+router.get('/:photoId', profileController.showPhoto);
 
-// Update an album (logged in)
+/* Store a new photo */
+router.post('/', photoValidationRules.createRules, profileController.storePhoto);
 
-router.put('/albums', albumValidationRules.updateRules, profileController.updateAlbum);
-
-// Get authenticated user's photos
- 
-router.get('/photos', profileController.getPhotos);
-
-
- // Add a photos to the logged user
- 
- 
-router.post('/photos', photoValidationRules.createRules, profileController.addPhoto);
-
-// Update photo (logged in)
-
-router.put('/photos', photoValidationRules.updateRules, profileController. updatePhoto);
-
-// add a photo to an album
-
-router.post('/albumPhoto', profileController.addPhotoToAlbum);
+/* Update a specific photo */
+router.put('/:photoId', photoValidationRules.updateRules, profileController.updatePhoto);
 
 
 module.exports = router;

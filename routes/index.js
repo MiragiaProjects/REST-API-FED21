@@ -12,9 +12,9 @@ router.get('/', (req, res, next) => {
 
 router.post('/register', userValidationRules.createRules, authController.register);
 
-router.use('/albums',auth.basic, require('./albums'));
-router.use('/photos',auth.basic, require('./photos'));
-router.use('/users',auth.basic, require('./users'));
-router.use('/profile',auth.basic, require('./profile'));
+//router.use('/albums',auth.basic, require('./albums'));
+//router.use('/photos',auth.basic, require('./photos'));
+router.use('/profile',auth.basic, require('./profile'))
+
 
 module.exports = router;

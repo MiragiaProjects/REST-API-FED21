@@ -40,8 +40,9 @@ const models = require('../models');
         res.send({
             status: 'success',
             data: {
-                user,
-            },
+                email: validData.email,
+                username: validData.username
+            } 
         });
 
     } catch (error) {

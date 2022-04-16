@@ -25,19 +25,8 @@
 	body('last_name').exists().isLength({ min: 2 }),
 ];
  
- /**
-  * Update Example validation rules
-  *
-  * Required: -
-  * Optional: title
-  */
-  const updateRules = [
-	body('password').optional().isLength({ min: 4 }),
-	body('first_name').optional().isLength({ min: 2 }),
-	body('last_name').optional().isLength({ min: 2 }),
-];
+ 
  
  module.exports = {
      createRules,
-     updateRules,
  }
