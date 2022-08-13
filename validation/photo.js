@@ -13,16 +13,9 @@
   */
   const createRules = [
 	body('title').exists().isLength({ min: 4 }),
-	body('url').exists().isLength({ min: 10, max: 13 }),
-	body('comment').optional().isInt({ min: 1 }),
-	body('user_id').exists().custom(async value => {
-		const user = await new models.User({ id: value }).fetch({ require: false });
-		if (!user) {
-			return Promise.reject(`User with ID ${value} does not exist.`);
-		}
-
-		return Promise.resolve();
-	}),
+	body('url').exists().isURL(),
+	body('comment').optional().isInt({ min: 4 }),
+	
 ];
  /**
   * Update Example validation rules
@@ -32,16 +25,9 @@
   */
   const updateRules = [
 	body('title').optional().isLength({ min: 4 }),
-	body('url').optional().isLength({ min: 10, max: 13 }),
-	body('comment').optional().isInt({ min: 1 }),
-	body('user_id').optional().custom(async value => {
-		const user = await new models.User({ id: value }).fetch({ require: false });
-		if (!user) {
-			return Promise.reject(`User with ID ${value} does not exist.`);
-		}
+	body('url').optional().isURL(),
+	body('comment').optional().isInt({ min: 4 }),
 
-		return Promise.resolve();
-	}),
 ];
  
  module.exports = {

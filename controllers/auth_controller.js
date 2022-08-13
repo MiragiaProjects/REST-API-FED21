@@ -41,7 +41,6 @@ const models = require('../models');
             status: 'success',
             data: {
                 email: validData.email,
-                username: validData.username
             } 
         });
 

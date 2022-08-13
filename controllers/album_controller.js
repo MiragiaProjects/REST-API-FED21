@@ -10,7 +10,7 @@ const models = require('../models');
  *
  * GET /
  */
-const indexAlbum = async (req, res) => {
+const index = async (req, res) => {
 	// load in albums
 	await req.user.load('album')
 	// send data
@@ -29,7 +29,7 @@ const indexAlbum = async (req, res) => {
  *
  * GET /:albumId
  */
-const showAlbum = async (req, res) => {
+const show = async (req, res) => {
 	// find albums related to our user
 	const user = await models.User.fetchById(req.user.id, { withRelated: ['album']});
 	const albumsUser = user.related('album');
@@ -56,7 +56,7 @@ const showAlbum = async (req, res) => {
  *
  * POST /
  */
-const storeAlbum = async (req, res) => {
+const store = async (req, res) => {
 	// check for any validation errors
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -91,7 +91,7 @@ const storeAlbum = async (req, res) => {
  *
  * PUT /:updateId
  */
-const updateAlbum = async (req, res) => {
+const update = async (req, res) => {
 	const albumId = req.params.albumId;
 
 	// make sure album exists
@@ -144,12 +144,12 @@ const addPhotoToAlbum = async (req, res) => {
 	}
 	const validData = matchedData(req);
 
-	const user = await models.User.fetchById(req.user.id, { withRelated: ['albums', 'photos']});
-	const albumsUser = user.related('albums').find(album => album.id == req.params.albumId);
-	const photosUser = user.related('photos').find(photo => photo.id == validData.photo_id);
+	const user = await models.User.fetchById(req.user.id, { withRelated: ['album', 'photo']});
+	const albumsUser = user.related('album').find(album => album.id == req.params.albumId);
+	const photosUser = user.related('photo').find(photo => photo.id == validData.photo_id);
 
-	const albums = await models.Album.fetchById(req.params.albumId, {withRelated: ['photos']});
-	const photosAlbum = albums.related('photos').find(photo => photo.id == validData.photo_id);
+	const albums = await models.Album.fetchById(req.params.albumId, {withRelated: ['photo']});
+	const photosAlbum = albums.related('photo').find(photo => photo.id == validData.photo_id);
 
 	// vi kollar om albumete med det idet vi frågar om finns
 	if(!albumsUser) {
@@ -195,136 +195,10 @@ const addPhotoToAlbum = async (req, res) => {
 	}throw error;
 }
 
-
-
-////////////////// PHOTO ///////////////////////////
-/**
- * Get all resources
- *
- * GET /
- */
- const indexPhoto = async (req, res) => {
-	const user = await new models.User({id: req.user.id}).fetch({ withRelated: ['photos']});
-
-	res.status(200).send({
-		status: 'success',
-		data: user.related('photos'),
-	})
-}
-
-/**
- * Get a specific resource
- *
- * GET /:photoId
- */
-const showPhoto = async (req, res) => {
-const user = await models.User.fetchById(req.user.id, { withRelated: ['photos'] });
-const photosUser = user.related('photos');
-
-	const photo = photosUser.find(photo => photo.id == req.params.photoId);
-	if(!photo) {
-		return res.status(404).send({
-			status: 'fail',
-			data: 'No photo could be found'
-		});
-	}
-	res.status(200).send({
-		status: 'success',
-		data: photo
-	});
-}
-
-/**
- * Store a new resource
- *
- * POST /
- */
-const storePhoto = async (req, res) => {
-	// check for any validation errors
-	const errors = validationResult(req);
-	if (!errors.isEmpty()) {
-		return res.status(422).send({ status: 'fail', data: errors.array() });
-	}
-
-	// get only the validated data from the request
-	const validData = matchedData(req);
-
-	validData.user_id = req.user.id;
-
-	try {
-		const photo = await new models.Photo(validData).save();
-		debug("Created new photo successfully: %O", photo);
-
-		res.send({
-			status: 'success',
-			data: {
-                photo,
-            }
-		});
-
-	} catch (error) {
-		res.status(500).send({
-			status: 'error',
-			message: 'Exception thrown in database when creating a new photo.',
-		});
-		throw error;
-	}
-}
-
-/**
- * Update a specific resource
- *
- * PUT /:photoId
- */
-const updatePhoto = async (req, res) => {
-
-	const errors = validationResult(req);
-	if(!errors.isEmpty()) {
-		return res.status(422).send({
-			status: 'fail',
-			data: errors.array()
-		});
-	}
-
-	const validData = matchedData(req);
-
-	const user = await models.User.fetchById(req.user.id, { withRelated: [photos] });
-	const photosUser = user.related('photos');
-
-	const photo = photosUser.find(photo => photo.id == req.params.photoId);
-	if(!photo) {
-		return res.status(404).send({
-			status: 'fail',
-			data: "No photos here"
-		});
-	}
-	try {
-		const updatedPhoto = await photo.save(validData);
-
-		return res.status(200).send({
-			status: 'success',
-			data: updatedPhoto
-		});
-	} catch (error) {
-		res.status(500).send({
-			status: 'error',
-			message: 'Exception thrown in database when updating a photo'
-		});
-		throw error;
-	}
-}
-
-
 module.exports = {
-	//ALBUM
-	indexAlbum,
-	showAlbum,
-	storeAlbum,
-	updateAlbum,
+	index,
+	show,
+	store,
+	update,
 	addPhotoToAlbum,
-	//PHOTO
-	indexPhoto,
-	showPhoto,
-	storePhoto,
-	updatePhoto,
 }

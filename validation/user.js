@@ -12,10 +12,10 @@
   * Optional: -
   */
   const createRules = [
-	body('username').exists().isLength({ min: 3 }).custom(async value => {
-		const user = await new models.User({ username: value }).fetch({ require: false });
-		if (user) {
-			return Promise.reject("Username already exists.");
+	body('email').exists().isEmail().custom(async value => {
+		const email = await new models.User({ email: value }).fetch({ require: false });
+		if (email) {
+			return Promise.reject("Email already exists.");
 		}
 
 		return Promise.resolve();

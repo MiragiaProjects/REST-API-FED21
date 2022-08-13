@@ -2,7 +2,7 @@ const User = require("./User");
 
 module.exports = (bookshelf) => {
 	return bookshelf.model('Photo', {
-		tableName: 'photos',
+		tableName: 'photo',
         albums() {
             return this.belongsToMany('Album')
         },
