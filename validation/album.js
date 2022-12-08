@@ -6,10 +6,8 @@
  const models = require('../models');
  
  /**
-  * Create Example validation rules
+  * Create Album validation rules
   *
-  * Required: title
-  * Optional: -
   */
   const createRules = [
 	body('title').exists().isLength({ min: 4 }),
@@ -17,15 +15,11 @@
 ];
  
  /**
-  * Update Example validation rules
+  * Update Album validation rules
   *
-  * Required: -
-  * Optional: title
   */
   const updateRules = [
-	body('title').optional().isLength({ min: 4 }),
-
-	
+	body('title').exists().isLength({ min: 4 }),
 ];
 
 	const addPhoto = [
@@ -33,7 +27,7 @@
 	];
  
  module.exports = {
-     createRules,
-     updateRules,
-	 addPhoto
+    createRules,
+    updateRules,
+	  addPhoto
  }

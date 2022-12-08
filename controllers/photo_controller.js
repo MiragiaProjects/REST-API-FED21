@@ -57,9 +57,8 @@ const store = async (req, res) => {
 
 	try {
 		const photo = await new models.Photo(validData).save();
-		debug("Created new photo successfully: %O", photo);
 
-		res.send({
+		res.status(200).send({
 			status: 'success',
 			data: {
                 photo,
@@ -92,7 +91,7 @@ const update = async (req, res) => {
 
 	const validData = matchedData(req);
 
-	const user = await models.User.fetchById(req.user.id, { withRelated: [photo] });
+	const user = await models.User.fetchById(req.user.id, { withRelated: ['photos'] });
 	const photosUser = user.related('photos');
 
 	const photo = photosUser.find(photo => photo.id == req.params.photoId);
@@ -102,6 +101,7 @@ const update = async (req, res) => {
 			data: "No photos here"
 		});
 	}
+
 	try {
 		const updatedPhoto = await photo.save(validData);
 
@@ -120,7 +120,6 @@ const update = async (req, res) => {
 
 
 module.exports = {
-
 	index,
 	show,
 	store,

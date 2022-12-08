@@ -9,6 +9,7 @@ const models = require('../models');
   * POST /register
   */
   const register = async (req, res) => {
+
     // check for any validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -37,7 +38,7 @@ const models = require('../models');
         const user = await new models.User(validData).save();
         debug("Created new user successfully: %O", user);
 
-        res.send({
+        res.status(200).send({
             status: 'success',
             data: {
                 email: validData.email,

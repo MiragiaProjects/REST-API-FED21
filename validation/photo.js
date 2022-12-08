@@ -6,10 +6,8 @@
  const models = require('../models');
  
  /**
-  * Create Example validation rules
+  * Create Photo validation rules
   *
-  * Required: title
-  * Optional: -
   */
   const createRules = [
 	body('title').exists().isLength({ min: 4 }),
@@ -18,10 +16,8 @@
 	
 ];
  /**
-  * Update Example validation rules
+  * Update Photo validation rules
   *
-  * Required: -
-  * Optional: title
   */
   const updateRules = [
 	body('title').optional().isLength({ min: 4 }),

@@ -22,8 +22,6 @@ const indexAlbum = async (req, res) => {
 	});
 }
 
-
-
 /**
  * Get a specific resource
  *

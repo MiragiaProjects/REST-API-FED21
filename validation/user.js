@@ -6,10 +6,8 @@
  const models = require('../models');
  
  /**
-  * Create Example validation rules
+  * Create user validation rules
   *
-  * Required: title
-  * Optional: -
   */
   const createRules = [
 	body('email').exists().isEmail().custom(async value => {
