@@ -1,4 +1,4 @@
-const User = require("./User");
+
 
 module.exports = (bookshelf) => {
 	return bookshelf.model('Photo', {
@@ -6,7 +6,7 @@ module.exports = (bookshelf) => {
         albums() {
             return this.belongsToMany('Album')
         },
-        user() {
+        users() {
             return this.belongsTo('User')
         }
     }, {

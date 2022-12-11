@@ -1,6 +1,7 @@
 //Authentization middleware
 
  const debug = require('debug')('books:auth');
+ const bcrypt = require('bcrypt');
  const { User } = require('../models');
  
  // Basic Authentication
@@ -14,7 +15,7 @@
  
          return res.status(401).send({
              status: 'fail',
-             data: 'Authorization required',
+             data: 'Authorization required uhm',
          });
      }
  
@@ -35,19 +36,30 @@
  
      // decode payload from base64
      const decodedPayload = Buffer.from(base64Payload, 'base64').toString('ascii');
-     // decodedPayload = "username:password"
+     // decodedPayload = "email:password"
  
-     // split decoded payload into "<username>:<password>"
-     const [username, password] = decodedPayload.split(':');
+     // split decoded payload into "<email>:<password>"
+     const [email, password] = decodedPayload.split(':');
  
-     // check if a user with this username and password exists
-     const user = await new User({ username, password }).fetch({ require: false });
+     // check if a user with this email and password exists
+     const user = await new User({ email }).fetch({ require: false });
      if (!user) {
          return res.status(401).send({
              status: 'fail',
              data: 'Authorization failed',
          });
      }
+
+    const hash = user.get('password');
+
+    // compare hashed passwords 
+    const result = await bcrypt.compare(password, hash);
+    if (!result) {
+        return res.status(401).send({
+            status: 'fail',
+            data: 'Authorization failed',
+        });
+    }
  
      // attach the user to request
      req.user = user;

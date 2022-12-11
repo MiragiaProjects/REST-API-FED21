@@ -5,7 +5,7 @@ const logger = require('morgan');
 // instantiate express
 const app = express();
 
-// middlewares
+// middleware
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());

@@ -39,7 +39,7 @@ const photosUser = user.related('photos');
 }
 
 /**
- * Store a new resource
+ * Store a new photo
  *
  * POST /
  */
@@ -47,7 +47,9 @@ const store = async (req, res) => {
 	// check for any validation errors
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		return res.status(422).send({ status: 'fail', data: errors.array() });
+		return res.status(422).send({ 
+			status: 'fail', 
+			data: errors.array() });
 	}
 
 	// get only the validated data from the request
@@ -60,9 +62,8 @@ const store = async (req, res) => {
 
 		res.status(200).send({
 			status: 'success',
-			data: {
-                photo,
-            }
+			data: photo,
+            
 		});
 
 	} catch (error) {

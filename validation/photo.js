@@ -12,7 +12,7 @@
   const createRules = [
 	body('title').exists().isLength({ min: 4 }),
 	body('url').exists().isURL(),
-	body('comment').optional().isInt({ min: 4 }),
+	body('comment').optional().isLength({ min: 4 }),
 	
 ];
  /**
@@ -22,7 +22,7 @@
   const updateRules = [
 	body('title').optional().isLength({ min: 4 }),
 	body('url').optional().isURL(),
-	body('comment').optional().isInt({ min: 4 }),
+	body('comment').optional().isLength({ min: 4 }),
 
 ];
  

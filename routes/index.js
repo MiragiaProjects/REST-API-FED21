@@ -12,8 +12,8 @@ router.get('/', (req, res, next) => {
 
 router.post('/register', userValidationRules.createRules, authController.register);
 
-router.use('/album',auth.basic, require('./albums'));
-router.use('/photo',auth.basic, require('./photos'));
+router.use('/albums',auth.basic, require('./albums'));
+router.use('/photos',auth.basic, require('./photos'));
 
 
 
